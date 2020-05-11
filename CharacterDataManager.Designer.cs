@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CharacterDataManagerForm));
 			this.CharacterDataFolderTextBox = new System.Windows.Forms.TextBox();
 			this.CharacterFolderBrowseButton = new System.Windows.Forms.Button();
 			this.CharacterListDropdown = new System.Windows.Forms.ComboBox();
@@ -44,6 +45,7 @@
 			this.MainFormToolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.CharacterDataFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.HelpLinkLabel = new System.Windows.Forms.LinkLabel();
+			this.CopyAsLinksCheckbox = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// CharacterDataFolderTextBox
@@ -114,6 +116,7 @@
 			this.MainFormToolTip.SetToolTip(this.CopyToSelectedButton, "Copy the highlighted files from the selected character to the highlighted charact" +
         "er(s) on the right.");
 			this.CopyToSelectedButton.UseVisualStyleBackColor = true;
+			this.CopyToSelectedButton.Click += new System.EventHandler(this.CopyToSelectedButton_Click);
 			// 
 			// CopyToAllButton
 			// 
@@ -124,6 +127,7 @@
 			this.CopyToAllButton.Text = "Copy to All";
 			this.MainFormToolTip.SetToolTip(this.CopyToAllButton, "Copy the highlighted files from the selected character to all other characters.");
 			this.CopyToAllButton.UseVisualStyleBackColor = true;
+			this.CopyToAllButton.Click += new System.EventHandler(this.CopyToAllButton_Click);
 			// 
 			// label1
 			// 
@@ -176,11 +180,24 @@
 			this.HelpLinkLabel.Text = "Info/Help";
 			this.HelpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.HelpLinkLabel_LinkClicked);
 			// 
+			// CopyAsLinksCheckbox
+			// 
+			this.CopyAsLinksCheckbox.AutoSize = true;
+			this.CopyAsLinksCheckbox.Enabled = false;
+			this.CopyAsLinksCheckbox.Location = new System.Drawing.Point(440, 96);
+			this.CopyAsLinksCheckbox.Name = "CopyAsLinksCheckbox";
+			this.CopyAsLinksCheckbox.Size = new System.Drawing.Size(92, 17);
+			this.CopyAsLinksCheckbox.TabIndex = 13;
+			this.CopyAsLinksCheckbox.Text = "Copy as Links";
+			this.MainFormToolTip.SetToolTip(this.CopyAsLinksCheckbox, resources.GetString("CopyAsLinksCheckbox.ToolTip"));
+			this.CopyAsLinksCheckbox.UseVisualStyleBackColor = true;
+			// 
 			// CharacterDataManagerForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(547, 460);
+			this.Controls.Add(this.CopyAsLinksCheckbox);
 			this.Controls.Add(this.HelpLinkLabel);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label3);
@@ -219,6 +236,7 @@
 		private System.Windows.Forms.ToolTip MainFormToolTip;
 		private System.Windows.Forms.FolderBrowserDialog CharacterDataFolderDialog;
 		private System.Windows.Forms.LinkLabel HelpLinkLabel;
+		private System.Windows.Forms.CheckBox CopyAsLinksCheckbox;
 	}
 }
 

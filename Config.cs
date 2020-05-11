@@ -16,7 +16,7 @@ namespace CharacterDataManager
 
 			//	Create the children.
 			ProgramSettings = new ProgramConfig( ConfigFolderPath + "Options.cfg" );
-			//	*****TODO: Probably need a file alias settings, since for extensibility, we should be listing all files that we find in the selected character's folder, and aliasing them to something nice.*****
+			FileAliasSettings = new FileAliasConfig( ConfigFolderPath + "FileAliases.cfg" );
 
 			//	The alias file lives one directory up since we may want to share it with other programs.
 			CharacterAliasSettings = new CharacterAliasConfig( Directory.GetParent( ConfigFolderPath ).Parent.FullName + "\\CharacterAliases.cfg" );
@@ -29,10 +29,12 @@ namespace CharacterDataManager
 
 			//	Ask our children to save themselves.  The children are expected to back up old files on their own if applicable.
 			ProgramSettings.SaveConfig();
+			FileAliasSettings.SaveConfig();
 			CharacterAliasSettings.SaveConfig();
 		}
 
 		public ProgramConfig ProgramSettings { get; protected set; }
+		public FileAliasConfig FileAliasSettings { get; protected set; }
 		public CharacterAliasConfig CharacterAliasSettings { get; protected set; }
 		public string ConfigFolderPath { get; protected set; }
 	}

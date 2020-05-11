@@ -54,6 +54,7 @@
       <DependentUpon>CharacterDataManager.cs</DependentUpon>
     </Compile>
     <Compile Include="Config.cs" />
+    <Compile Include="FileAliasConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ToDo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

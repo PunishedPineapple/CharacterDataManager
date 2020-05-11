@@ -23,6 +23,7 @@ namespace CharacterDataManager
 			CharacterDataFolderPath = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ) + "\\My Games\\FINAL FANTASY XIV - A Realm Reborn\\";
 			DefaultCharacterID = "";
 			ShowInitialWarning = true;
+			CopyAsLinks = false;
 			DefaultSelectedFiles.Add( "COMMON.DAT" );
 			DefaultSelectedFiles.Add( "CONTROL0.DAT" );
 			DefaultSelectedFiles.Add( "CONTROL1.DAT" );
@@ -44,6 +45,7 @@ namespace CharacterDataManager
 					if( line.Split( '=' ).First().Trim().Equals( "CharacterDataFolderPath" ) )		CharacterDataFolderPath = line.Split( '=' ).Last().Trim();
 					if( line.Split( '=' ).First().Trim().Equals( "DefaultCharacterID" ) )			DefaultCharacterID = line.Split( '=' ).Last().Trim();
 					if( line.Split( '=' ).First().Trim().Equals( "ShowInitialWarning" ) )			ShowInitialWarning = bool.Parse( line.Split( '=' ).Last().Trim() );
+					if( line.Split( '=' ).First().Trim().Equals( "CopyAsLinks" ) )					CopyAsLinks = bool.Parse( line.Split( '=' ).Last().Trim() );
 
 					if( line.Split( '=' ).First().Trim().Equals( "DefaultSelectedFiles" ) )
 					{
@@ -74,6 +76,7 @@ namespace CharacterDataManager
 				cfgString += "CharacterDataFolderPath" + " = " + CharacterDataFolderPath + "\r\n";
 				cfgString += "DefaultCharacterID" + " = " + DefaultCharacterID + "\r\n";
 				cfgString += "ShowInitialWarning" + " = " + ShowInitialWarning.ToString() + "\r\n";
+				cfgString += "CopyAsLinks" + " = " + CopyAsLinks.ToString() + "\r\n";
 
 				cfgString += "DefaultSelectedFiles" + " = ";
 				foreach( string str in DefaultSelectedFiles )
@@ -97,6 +100,7 @@ namespace CharacterDataManager
 		public string CharacterDataFolderPath { get; set; }
 		public string DefaultCharacterID { get; set; }
 		public bool ShowInitialWarning { get; set; }
+		public bool CopyAsLinks { get; set; }
 		public List<string> DefaultSelectedFiles { get; set; }
 		public List<string> DefaultSelectedTargetFolders { get; set; }
 		protected string ConfigFilePath { get; set; }

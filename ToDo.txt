@@ -1,0 +1,14 @@
+﻿***** TODO LIST *****
+
+High Priority:
+
+- Verify that file copying/linking works as-expected.
+- Add a file name alias system (like folders, but probably not user configurable).
+
+
+Low Priority / Cleanup:
+
+
+Very Low Priority / Potential New Features:
+
+- Can we have it subscribe to file changes and automatically copy while open?
