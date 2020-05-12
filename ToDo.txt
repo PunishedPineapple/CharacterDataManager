@@ -2,11 +2,11 @@
 
 High Priority:
 
-- Verify that file copying/linking works as-expected.
-- Add a file name alias system (like folders, but probably not user configurable).
 
 
 Low Priority / Cleanup:
+
+- Can we set the entry in the list box to be unselectable for the character in the combo box, or do we need to just let it happen and only handle ignoring it when actually copying files?  Seems we can't make it readonly really, can we handle indices with a missing item?  https://stackoverflow.com/questions/2438168/winforms-listbox-with-readonly-disabled-items
 
 
 Very Low Priority / Potential New Features:

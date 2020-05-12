@@ -31,17 +31,6 @@ namespace CharacterDataManager
 			{
 				CharacterDataFolderTextBox.Text = mSettings.ProgramSettings.CharacterDataFolderPath;
 				PopulateCharacterLists();
-				if( mSettings.ProgramSettings.DefaultCharacterID.Length > 0 && Directory.Exists( mSettings.ProgramSettings.CharacterDataFolderPath + '\\' + mSettings.ProgramSettings.DefaultCharacterID ) )
-				{
-					for( int i = 0; i < CharacterListDropdown.Items.Count; ++i )
-					{
-						if( mCharacterFolderList[i].Split( '\\' ).Last() == mSettings.ProgramSettings.DefaultCharacterID )
-						{
-							CharacterListDropdown.SelectedIndex = i;
-							break;
-						}
-					}
-				}
 			}
 
 			//	Show a warning about backing up character data if this is the first time that the program has been used.
@@ -64,7 +53,10 @@ namespace CharacterDataManager
 		//	Member Functions
 		private void PopulateCharacterLists()
 		{
-			//	*****TODO: Probably save off the selected characters in the righthand box into settings before we clean up and rebuild.  Maybe save the default character too.*****
+			//	Save off the character selections before we clean up and rebuild.
+			SaveSourceCharacterSelection();
+			SaveTargetCharacterListSelection();
+			SaveCopyAsLinksOption();
 
 			CharacterListDropdown.Items.Clear();
 			TargetCharactersListBox.Items.Clear();
@@ -76,9 +68,18 @@ namespace CharacterDataManager
 				TargetCharactersListBox.Items.Add( mSettings.CharacterAliasSettings.GetAlias( dir.Split( '\\' ).Last() ) );
 			}
 
-			//	*****TODO: Can we set the entry in the list box to be unselectable for the character in the combo box, or do we need to just let it happen and only handle ignoring it when actually copying files?  Seems we can't make it readonly really, can we handle indices with a missing item?  https://stackoverflow.com/questions/2438168/winforms-listbox-with-readonly-disabled-items *****
-
-			//	Set the selection to what we had saved.
+			//	Set the selections to what we had saved.
+			if( mSettings.ProgramSettings.DefaultCharacterID.Length > 0 && Directory.Exists( mSettings.ProgramSettings.CharacterDataFolderPath + '\\' + mSettings.ProgramSettings.DefaultCharacterID ) )
+			{
+				for( int i = 0; i < CharacterListDropdown.Items.Count; ++i )
+				{
+					if( mCharacterFolderList[i].Split( '\\' ).Last() == mSettings.ProgramSettings.DefaultCharacterID )
+					{
+						CharacterListDropdown.SelectedIndex = i;
+						break;
+					}
+				}
+			}
 			for( int i = 0; i < TargetCharactersListBox.Items.Count; ++i )
 			{
 				TargetCharactersListBox.SetSelected( i, mSettings.ProgramSettings.DefaultSelectedTargetFolders.Contains( mCharacterFolderList[i].Split( '\\' ).Last() ) );
@@ -87,12 +88,13 @@ namespace CharacterDataManager
 			//	Don't allow the user to attempt to copy as links unless the filesystem supports hard links.
 			bool allowLinks = mCharacterFolderList.Length > 0 && new DriveInfo( Directory.GetDirectoryRoot( mCharacterFolderList[0] ) ).DriveFormat.Equals( "NTFS" );
 			CopyAsLinksCheckbox.Enabled = allowLinks;
-			CopyAsLinksCheckbox.Checked = CopyAsLinksCheckbox.Checked && allowLinks;
+			CopyAsLinksCheckbox.Checked = mSettings.ProgramSettings.CopyAsLinks && allowLinks;
 		}
 
 		private void PopulateDataFilesListBox( bool clear = false )
 		{
-			//	*****TODO: Probably save off the selected files into settings before we clean up and rebuild.*****
+			//	Save off the selected files into settings before we clean up and rebuild.
+			SaveFileListSelection();
 
 			DataFilesListBox.SelectedIndex = -1;
 			DataFilesListBox.Items.Clear();
@@ -126,7 +128,7 @@ namespace CharacterDataManager
 				foreach( string destDir in destDirs )
 				{
 					//	Don't copy from source back to source.
-					if( destDir.Equals( sourceDir ) ) break;
+					if( destDir.Equals( sourceDir ) ) continue;
 
 					//	Just for cleanliness.
 					string sourceFilePath = sourceDir + "\\" + fileName;
@@ -136,7 +138,7 @@ namespace CharacterDataManager
 					if( !File.Exists( sourceFilePath ) || !Directory.Exists( destDir ) )
 					{
 						hadMissingFilesOrFolders = true;
-						break;
+						continue;
 					}
 
 					//	If we're copying a linked file over an existing hard link, it might fail, so delete first before copying/linking.
@@ -166,13 +168,19 @@ namespace CharacterDataManager
 
 			if( hadLinkingFailures )
 			{
-				MessageBox.Show( "Error(s) occurred while trying to create file links.  This most likely occurred either because the file system does not support hard links, or because an attempt was made to overwrite an existing link with the linked file.", "Error!" );
+				MessageBox.Show( "Error(s) occurred while trying to create file links.  This most likely occurred either because the file system does not support hard links, or because an attempt was made to overwrite an existing link with the linked file.  An attempt was made to copy the file(s) without creating links.", "Error!" );
 			}
 
 			if( hadMissingFilesOrFolders )
 			{
 				MessageBox.Show( "Error(s) occurred while trying to copy files: One or more source files or destination directories could not be found.", "Error!" );
 			}
+
+			if( !hadMissingFilesOrFolders )
+			{
+				MessageBox.Show( "The specified copying/linking operation was completed.", "Complete" );
+			}
+
 		}
 
 		//	Event Handlers
@@ -183,33 +191,60 @@ namespace CharacterDataManager
 
 		private void CharacterDataManagerForm_FormClosed( object sender, FormClosedEventArgs e )
 		{
-			//	*****TODO: Package these bits off into functions that we can use for saving selections up above too (when changing characters, directories, etc.).*****
-
 			//	Save which character is selected for next time.
-			if( CharacterListDropdown.SelectedIndex > -1 && CharacterListDropdown.SelectedIndex < mCharacterFolderList.Length )
-			{
-				mSettings.ProgramSettings.DefaultCharacterID = mCharacterFolderList[CharacterListDropdown.SelectedIndex].Split( '\\' ).Last();
-			}
+			SaveSourceCharacterSelection();
 
 			//	Save which files are selected for next time.
-			mSettings.ProgramSettings.DefaultSelectedFiles.Clear();
-			foreach( int i in DataFilesListBox.SelectedIndices )
-			{
-				mSettings.ProgramSettings.DefaultSelectedFiles.Add( mDataFileNameList[i].ToString() );
-			}
+			SaveFileListSelection();
 
 			//	Save which characters we have selected in the right-hand list.
-			mSettings.ProgramSettings.DefaultSelectedTargetFolders.Clear();
-			for( int i = 0; i < TargetCharactersListBox.Items.Count; ++i )
-			{
-				if( TargetCharactersListBox.SelectedIndices.Contains( i ) ) mSettings.ProgramSettings.DefaultSelectedTargetFolders.Add( mCharacterFolderList[i].Split( '\\' ).Last() );
-			}
+			SaveTargetCharacterListSelection();
 
 			//	Save any other miscellaneous things.
-			mSettings.ProgramSettings.CopyAsLinks = CopyAsLinksCheckbox.Checked;
+			SaveCopyAsLinksOption();
 
 			//	Write it all out to file.
 			mSettings.SaveConfig();
+		}
+
+		void SaveFileListSelection()
+		{
+			if( DataFilesListBox.Items.Count > 0 )
+			{
+				mSettings.ProgramSettings.DefaultSelectedFiles.Clear();
+				foreach( int i in DataFilesListBox.SelectedIndices )
+				{
+					mSettings.ProgramSettings.DefaultSelectedFiles.Add( mDataFileNameList[i].ToString() );
+				}
+			}
+		}
+
+		void SaveSourceCharacterSelection()
+		{
+			if( CharacterListDropdown.Items.Count > 0 && CharacterListDropdown.SelectedIndex > -1 && CharacterListDropdown.SelectedIndex < mCharacterFolderList.Length )
+			{
+				mSettings.ProgramSettings.DefaultCharacterID = mCharacterFolderList[CharacterListDropdown.SelectedIndex].Split( '\\' ).Last();
+			}
+		}
+
+		void SaveTargetCharacterListSelection()
+		{
+			if( TargetCharactersListBox.Items.Count > 0 )
+			{
+				mSettings.ProgramSettings.DefaultSelectedTargetFolders.Clear();
+				for( int i = 0; i < TargetCharactersListBox.Items.Count; ++i )
+				{
+					if( TargetCharactersListBox.SelectedIndices.Contains( i ) ) mSettings.ProgramSettings.DefaultSelectedTargetFolders.Add( mCharacterFolderList[i].Split( '\\' ).Last() );
+				}
+			}
+		}
+
+		void SaveCopyAsLinksOption()
+		{
+			if( CopyAsLinksCheckbox.Visible )
+			{
+				mSettings.ProgramSettings.CopyAsLinks = CopyAsLinksCheckbox.Checked;
+			}
 		}
 
 		private void CharacterListDropdown_SelectedIndexChanged( object sender, EventArgs e )
@@ -275,6 +310,22 @@ namespace CharacterDataManager
 
 				//	Do the copying
 				CopyFiles( filesToCopyList.ToArray(), mCharacterFolderList[CharacterListDropdown.SelectedIndex], destinationDirsList.ToArray(), CopyAsLinksCheckbox.Checked );
+			}
+		}
+
+		private void SetCharacterAliasButton_Click( object sender, EventArgs e )
+		{
+			int currentCharacterIndex = CharacterListDropdown.SelectedIndex;
+			if( currentCharacterIndex > -1 && currentCharacterIndex < mCharacterFolderList.Length )
+			{
+				string characterFolderName = mCharacterFolderList[CharacterListDropdown.SelectedIndex].Split( '\\' ).Last();
+				string input = Interaction.InputBox( "Input the alias (friendly name) that you wish to use for the character " + characterFolderName, "Set Alias", mSettings.CharacterAliasSettings.GetAlias( characterFolderName ) );
+				if( input.Length > 0 )
+				{
+					mSettings.CharacterAliasSettings.SetAlias( mCharacterFolderList[CharacterListDropdown.SelectedIndex].Split( '\\' ).Last(), input );
+					PopulateCharacterLists();
+					CharacterListDropdown.SelectedIndex = currentCharacterIndex;
+				}
 			}
 		}
 	}

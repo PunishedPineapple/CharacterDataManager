@@ -120,10 +120,13 @@
   <metadata name="MainFormToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>210, 17</value>
   </metadata>
-  <metadata name="CharacterDataFolderDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>12, 17</value>
+  <metadata name="MainFormToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>210, 17</value>
   </metadata>
   <data name="CopyAsLinksCheckbox.ToolTip" xml:space="preserve">
     <value>Copies files as hard links, making changes on one character sync to all linked characters automatically.  May cause issues if game file handling changes.  Copy files without this box checked to remove links.</value>
   </data>
+  <metadata name="CharacterDataFolderDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>12, 17</value>
+  </metadata>
 </root>

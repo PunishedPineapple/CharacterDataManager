@@ -43,9 +43,9 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.MainFormToolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.CopyAsLinksCheckbox = new System.Windows.Forms.CheckBox();
 			this.CharacterDataFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.HelpLinkLabel = new System.Windows.Forms.LinkLabel();
-			this.CopyAsLinksCheckbox = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// CharacterDataFolderTextBox
@@ -87,6 +87,7 @@
 			this.SetCharacterAliasButton.Text = "Set Alias";
 			this.MainFormToolTip.SetToolTip(this.SetCharacterAliasButton, "Set a friendly name for the currently selected character.");
 			this.SetCharacterAliasButton.UseVisualStyleBackColor = true;
+			this.SetCharacterAliasButton.Click += new System.EventHandler(this.SetCharacterAliasButton_Click);
 			// 
 			// DataFilesListBox
 			// 
@@ -165,6 +166,18 @@
 			this.label4.TabIndex = 11;
 			this.label4.Text = "Characters to Update:";
 			// 
+			// CopyAsLinksCheckbox
+			// 
+			this.CopyAsLinksCheckbox.AutoSize = true;
+			this.CopyAsLinksCheckbox.Enabled = false;
+			this.CopyAsLinksCheckbox.Location = new System.Drawing.Point(440, 96);
+			this.CopyAsLinksCheckbox.Name = "CopyAsLinksCheckbox";
+			this.CopyAsLinksCheckbox.Size = new System.Drawing.Size(92, 17);
+			this.CopyAsLinksCheckbox.TabIndex = 8;
+			this.CopyAsLinksCheckbox.Text = "Copy as Links";
+			this.MainFormToolTip.SetToolTip(this.CopyAsLinksCheckbox, resources.GetString("CopyAsLinksCheckbox.ToolTip"));
+			this.CopyAsLinksCheckbox.UseVisualStyleBackColor = true;
+			// 
 			// CharacterDataFolderDialog
 			// 
 			this.CharacterDataFolderDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
@@ -175,22 +188,10 @@
 			this.HelpLinkLabel.Location = new System.Drawing.Point(488, 8);
 			this.HelpLinkLabel.Name = "HelpLinkLabel";
 			this.HelpLinkLabel.Size = new System.Drawing.Size(52, 13);
-			this.HelpLinkLabel.TabIndex = 12;
+			this.HelpLinkLabel.TabIndex = 9;
 			this.HelpLinkLabel.TabStop = true;
 			this.HelpLinkLabel.Text = "Info/Help";
 			this.HelpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.HelpLinkLabel_LinkClicked);
-			// 
-			// CopyAsLinksCheckbox
-			// 
-			this.CopyAsLinksCheckbox.AutoSize = true;
-			this.CopyAsLinksCheckbox.Enabled = false;
-			this.CopyAsLinksCheckbox.Location = new System.Drawing.Point(440, 96);
-			this.CopyAsLinksCheckbox.Name = "CopyAsLinksCheckbox";
-			this.CopyAsLinksCheckbox.Size = new System.Drawing.Size(92, 17);
-			this.CopyAsLinksCheckbox.TabIndex = 13;
-			this.CopyAsLinksCheckbox.Text = "Copy as Links";
-			this.MainFormToolTip.SetToolTip(this.CopyAsLinksCheckbox, resources.GetString("CopyAsLinksCheckbox.ToolTip"));
-			this.CopyAsLinksCheckbox.UseVisualStyleBackColor = true;
 			// 
 			// CharacterDataManagerForm
 			// 
