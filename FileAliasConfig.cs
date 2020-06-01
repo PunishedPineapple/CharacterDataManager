@@ -19,13 +19,15 @@ namespace CharacterDataManager
 		}
 		protected void SetDefaultConfig()
 		{
+			mAliases.Add( "ACQ.DAT", "Tell Contact History" );
+			mAliases.Add( "ADDON.DAT", "HUD Layout" );
 			mAliases.Add( "COMMON.DAT", "Basic Settings" );
 			mAliases.Add( "CONTROL0.DAT", "KB/M-Mode Settings" );
 			mAliases.Add( "CONTROL1.DAT", "Gamepad-Mode Settings" );
 			mAliases.Add( "GEARSET.DAT", "Gear Sets" );
 			mAliases.Add( "GS.DAT", "Gold Saucer Settings" );
-			mAliases.Add( "HOTBAR.DAT", "Hotbars" );
-			mAliases.Add( "ITEMFDR.DAT", "Item Sort Order" );
+			mAliases.Add( "HOTBAR.DAT", "Hotbar Assignments" );
+			mAliases.Add( "ITEMFDR.DAT", "Item Search Cache" );
 			mAliases.Add( "ITEMODR.DAT", "Item Sort Order" );
 			mAliases.Add( "KEYBIND.DAT", "Keybinds" );
 			mAliases.Add( "LOGFLTR.DAT", "Chat Log Tab Filters" );
@@ -38,10 +40,18 @@ namespace CharacterDataManager
 			if( File.Exists( ConfigFilePath ) )
 			{
 				List<string> lines = File.ReadLines( ConfigFilePath ).ToList();
-				mAliases.Clear();
 				foreach( string line in lines )
 				{
-					mAliases.Add( line.Split( '=' ).First().Trim(), line.Split( '=' ).Last().Trim() );
+					string key = line.Split( '=' ).First().Trim();
+					string value = line.Split( '=' ).Last().Trim();
+					if( mAliases.ContainsKey( key ) )
+					{
+						mAliases[key] = value;
+					}
+					else
+					{
+						mAliases.Add( key, value  );
+					}
 				}
 			}
 		}
