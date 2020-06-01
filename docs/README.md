@@ -19,9 +19,10 @@ This is a tool for Final Fantasy XIV that allows more control over syncing chara
 This program supports copying character configuration files as hard links, essentially allowing for multiple character's configuration to be stored in the same file.  This means that changes made to the file from one character can be reflected in another without actually copying the file after the change was made.  To do this, prepare a basic settings file copy as described above, but before clicking the button to copy, check the "Copy as Links" checkbox.
 
 It is important to note a few things before using this feature:
-* This feature is only available on drives formatted as NTFS.  This is a Windows and filesystem limitation.
-* Windows handling of links can be a bit finicky.  Copying or moving files in certain ways can de-link them, and copying a file over a linked file will generally fail.  Because of this the program deletes existing files in the target directory before linking them.
-* If the game ever changes how it handles writing data to the settings files, it may break the links at each write, at which point this feature would no longer work.
+* This feature is only available on drives formatted as NTFS.  This is a Windows (and potentially filesystem) limitation.
+* Windows handling of links can be a bit finicky.  Copying or moving files in certain ways can de-link them, and copying a file over a linked file will generally fail.  Because of this, the program deletes existing files in the target directory before linking them.
+* If the game ever changes how it handles writing data to the settings files, it may break the links at each write, or even cause the game to fail to write that settings file to disk, at which point this feature would no longer work.
+* In the even that you need to de-link these files, you can perform a copy without the link option set.
 
 ## IMPORTANT
 This program should be considered as being in beta.  It directly overwrites some or all your local character configuration files, and if there are any unknown bugs, it could render them unusable and require you to restore from backup.  It is also technically possible for SE to detect the use of this program, but only in the sense that they would be able to detect that you had manually copied or linked the files yourself (i.e., copying via the file explorer or the command line).
@@ -32,4 +33,4 @@ By default, character names will be an unfriendly string of numbers and letters,
 * With the [Quick Launcher](https://github.com/goatcorp/FFXIVQuickLauncher) (unofficial), by installing the Character Sync plugin and checking the config page for it while logged in.  If you're going to use that plugin, though, this program is largely worthless.
 
 ## License
-Code and executable are covered under the [MIT License](LICENSE).  Final Fantasy XIV (and any associated data used by this program) is copyright and owned by Square Enix.
+Code and executable are covered under the [MIT License](../LICENSE).  Final Fantasy XIV (and any associated data used by this program) is copyright and owned by Square Enix.
